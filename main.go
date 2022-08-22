@@ -14,7 +14,6 @@ func worker(id int, jobs <-chan int, results chan<- int) {
 }
 
 func main() {
-	fmt.Println("fdsfds")
 	job := make(chan int, 10)
 	result := make(chan int, 10)
 	for w := 1; w <= 10; w++ {
