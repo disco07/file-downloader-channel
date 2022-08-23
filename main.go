@@ -1,47 +1,113 @@
 package main
 
 import (
+	"errors"
+	"flag"
 	"fmt"
-	"time"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
+	"strconv"
+	"strings"
 )
 
-func worker(id int, jobs <-chan int, results chan<- int) {
-	for j := range jobs {
-		fmt.Println("worker", id, "processing job", j)
-		time.Sleep(time.Second)
-		results <- j
+func downloader(url string) error {
+	if strings.TrimSpace(url) == "" {
+		return errors.New("invalid url")
 	}
+
+	ch := make(chan os.File)
+	defer close(ch)
+
+	res, err := http.Head(url)
+	if err != nil {
+		fmt.Printf("error: %s", err.Error())
+		return errors.New("unsupported protocol scheme")
+	}
+	urlSplit := strings.Split(url, "/")
+	filename := urlSplit[len(urlSplit)-1]
+	if res.Header.Get("Accept-Ranges") != "bytes" {
+		return errors.New("impossible de télécharger ce fichier")
+	}
+
+	cntLen, err := strconv.Atoi(res.Header.Get("Content-Length"))
+	if err != nil {
+		return err
+	}
+	nbPart := 5
+	offset := cntLen / nbPart
+
+	for i := 0; i < nbPart; i++ {
+		name := fmt.Sprintf("part%d", i)
+		start := i * offset
+		end := (i + 1) * offset
+		part, err := os.Create(name)
+		if err != nil {
+			return err
+		}
+
+		go func() {
+			ch <- writeFile(url, start, end, *part)
+		}()
+	}
+
+	out, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	for file := range ch {
+		fmt.Println(file.Name())
+		i := 1
+		f, err := ioutil.ReadAll(&file)
+		if err != nil {
+			return err
+		}
+
+		out.WriteAt(f, int64(i*offset))
+		i++
+	}
+
+	return nil
 }
 
-func worker2(id int) {
-	fmt.Printf("Worker %d starting\n", id)
-	time.Sleep(time.Second)
-	fmt.Printf("Worker %d done\n", id)
+func writeFile(url string, start, end int, file os.File) os.File {
+	defer file.Close()
+	client := http.Client{}
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	req.Header.Add("Range", fmt.Sprintf("bytes=%d-%d", start, end))
+	res, err := client.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	_, err = file.Write(body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return file
 }
 
 func main() {
-	job := make(chan int, 10)
-	result := make(chan int, 10)
-	for w := 1; w <= 9; w++ {
-		go worker(w, job, result)
+	var url string
+	flag.StringVar(&url, "u", "https://agritrop.cirad.fr/584726/1/Rapport.pdf", "url of the file to download")
+	flag.Parse()
+	err := downloader(url)
+	if err != nil {
+		log.Fatal(err)
+		return
 	}
-	for j := 1; j <= 9; j++ {
-		job <- j
-	}
-	close(job)
-	for a := 1; a <= 9; a++ {
-		<-result
-	}
-
-	//var wg sync.WaitGroup
-	//for i := 1; i <= 9; i++ {
-	//	wg.Add(1)
-	//
-	//	i := i
-	//	go func() {
-	//		defer wg.Done()
-	//		worker2(i)
-	//	}()
-	//}
-	//wg.Wait()
 }
