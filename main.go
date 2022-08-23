@@ -59,11 +59,6 @@ func downloader(url string) error {
 	defer out.Close()
 	var files []string
 
-	for file := range ch {
-		files = append(files, file.Name())
-	}
-	fmt.Println(files)
-	close(ch)
 	for i := 0; i < nbPart; i++ {
 		name := fmt.Sprintf("part%d", i)
 		file, err := ioutil.ReadFile(name)
@@ -76,6 +71,10 @@ func downloader(url string) error {
 			return err
 		}
 	}
+	for file := range ch {
+		files = append(files, file.Name())
+	}
+	fmt.Println(files)
 
 	return nil
 }
