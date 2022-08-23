@@ -18,7 +18,7 @@ func downloader(url string) error {
 	}
 
 	ch := make(chan os.File)
-	defer close(ch)
+	//defer close(ch)
 
 	res, err := http.Head(url)
 	if err != nil {
@@ -57,17 +57,24 @@ func downloader(url string) error {
 		return err
 	}
 	defer out.Close()
+	var files []string
 
 	for file := range ch {
-		fmt.Println(file.Name())
-		i := 1
-		f, err := ioutil.ReadAll(&file)
+		files = append(files, file.Name())
+	}
+	fmt.Println(files)
+	close(ch)
+	for i := 0; i < nbPart; i++ {
+		name := fmt.Sprintf("part%d", i)
+		file, err := ioutil.ReadFile(name)
 		if err != nil {
 			return err
 		}
+		out.WriteAt(file, int64(i*offset))
 
-		out.WriteAt(f, int64(i*offset))
-		i++
+		if err := os.Remove(name); err != nil {
+			return err
+		}
 	}
 
 	return nil
