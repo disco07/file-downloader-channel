@@ -83,7 +83,7 @@ func writeFile(url string, start, end int, file os.File) os.File {
 	defer file.Close()
 	client := http.Client{}
 
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
