@@ -50,6 +50,7 @@ func downloader(url string) error {
 		go func() {
 			ch <- writeFile(url, start, end, *part)
 		}()
+		<-ch
 	}
 
 	out, err := os.Create(filename)
@@ -57,7 +58,6 @@ func downloader(url string) error {
 		return err
 	}
 	defer out.Close()
-	var files []string
 
 	for i := 0; i < nbPart; i++ {
 		name := fmt.Sprintf("part%d", i)
@@ -71,10 +71,6 @@ func downloader(url string) error {
 			return err
 		}
 	}
-	for file := range ch {
-		files = append(files, file.Name())
-	}
-	fmt.Println(files)
 
 	return nil
 }
