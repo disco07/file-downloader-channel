@@ -4,6 +4,8 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"github.com/schollz/progressbar/v3"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -16,9 +18,6 @@ func downloader(url string) error {
 	if strings.TrimSpace(url) == "" {
 		return errors.New("invalid url")
 	}
-
-	ch := make(chan os.File)
-	//defer close(ch)
 
 	res, err := http.Head(url)
 	if err != nil {
@@ -37,6 +36,8 @@ func downloader(url string) error {
 	}
 	nbPart := 5
 	offset := cntLen / nbPart
+
+	ch := make(chan os.File, nbPart)
 
 	for i := 0; i < nbPart; i++ {
 		name := fmt.Sprintf("part%d", i)
@@ -71,6 +72,7 @@ func downloader(url string) error {
 			return err
 		}
 	}
+	close(ch)
 
 	return nil
 }
@@ -90,6 +92,18 @@ func writeFile(url string, start, end int, file os.File) os.File {
 		log.Fatal(err)
 	}
 	defer res.Body.Close()
+
+	f, err := os.OpenFile(file.Name(), os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+
+	bar := progressbar.DefaultBytes(
+		res.ContentLength,
+		"downloading",
+	)
+	io.Copy(io.MultiWriter(f, bar), res.Body)
 
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
