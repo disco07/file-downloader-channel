@@ -33,12 +33,12 @@ func downloader(url string) error {
 	urlSplit := strings.Split(url, "/")
 	filename := urlSplit[len(urlSplit)-1]
 	if res.Header.Get("Accept-Ranges") != "bytes" {
-		return errors.New("impossible de télécharger ce fichier")
+		return errors.New("unable to download file with multithreads")
 	}
 
 	cntLen, err := strconv.Atoi(res.Header.Get("Content-Length"))
 	if err != nil {
-		return err
+		return errors.New("unable to parse variable")
 	}
 	nbPart := 3
 	offset := cntLen / nbPart
