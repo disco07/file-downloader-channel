@@ -47,7 +47,7 @@ func downloader(url string) error {
 	results := make(chan string, nbPart)
 
 	for w := 0; w < nbPart; w++ {
-		go worker(url, jobs, results)
+		go worker(w, url, jobs, results)
 	}
 
 	for i := 0; i < nbPart; i++ {
@@ -59,7 +59,7 @@ func downloader(url string) error {
 	close(jobs)
 
 	for i := 0; i < nbPart; i++ {
-		fmt.Println(<-results)
+		<-results
 	}
 
 	out, err := os.Create(filename)
@@ -84,7 +84,7 @@ func downloader(url string) error {
 	return nil
 }
 
-func worker(url string, jobs <-chan filePart, results chan<- string) {
+func worker(workerID int, url string, jobs <-chan filePart, results chan<- string) {
 	for job := range jobs {
 		part, err := os.Create(job.name)
 		if err != nil {
@@ -110,7 +110,7 @@ func worker(url string, jobs <-chan filePart, results chan<- string) {
 
 		bar := progressbar.DefaultBytes(
 			res.ContentLength,
-			"downloading",
+			fmt.Sprintf("downloading-worker-%d", workerID),
 		)
 		io.Copy(io.MultiWriter(f, bar), res.Body)
 
