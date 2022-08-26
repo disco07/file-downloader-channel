@@ -12,6 +12,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type filePart struct {
@@ -31,7 +32,6 @@ func downloader(url string) error {
 	}
 	urlSplit := strings.Split(url, "/")
 	filename := urlSplit[len(urlSplit)-1]
-	fmt.Println(filename)
 	if res.Header.Get("Accept-Ranges") != "bytes" {
 		return errors.New("impossible de télécharger ce fichier")
 	}
@@ -40,7 +40,7 @@ func downloader(url string) error {
 	if err != nil {
 		return err
 	}
-	nbPart := 5
+	nbPart := 3
 	offset := cntLen / nbPart
 
 	jobs := make(chan filePart, nbPart)
@@ -135,9 +135,11 @@ func main() {
 	var url string
 	flag.StringVar(&url, "u", "https://agritrop.cirad.fr/584726/1/Rapport.pdf", "url of the file to download")
 	flag.Parse()
+	start := time.Now()
 	err := downloader(url)
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
+	fmt.Println(time.Since(start))
 }
