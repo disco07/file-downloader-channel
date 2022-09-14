@@ -1,4 +1,5 @@
 # file-downloader-channel
+![Coverage](https://img.shields.io/badge/Coverage-73.7%25-brightgreen)
 
 File downloader with goroutine
 
