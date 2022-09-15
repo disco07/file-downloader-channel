@@ -46,7 +46,7 @@
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
   }
 }</component>
-  <component name="RunManager" selected="Go Test.TestDownloader in github.com/disco07/file-downloader-channel">
+  <component name="RunManager" selected="Go Test.go test github.com/disco07/file-downloader-channel">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="file-downloader-channel" />
       <working_directory value="$PROJECT_DIR$" />
@@ -97,8 +97,19 @@
       <framework value="gotest" />
       <method v="2" />
     </configuration>
+    <configuration name="go test github.com/disco07/file-downloader-channel" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="file-downloader-channel" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="github.com/disco07/file-downloader-channel" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Test.go test github.com/disco07/file-downloader-channel" />
         <item itemvalue="Go Test.TestDownloader in github.com/disco07/file-downloader-channel" />
         <item itemvalue="Go Test.TestDownloaderNotError in github.com/disco07/file-downloader-channel" />
         <item itemvalue="Go Build.go build github.com/disco07/file-downloader-channel" />
