@@ -45,6 +45,8 @@ func TestDownloaderNotError(t *testing.T) {
 				t.Errorf("Unexpected error for input %v: %v (expected %v)", tt.url, err, tt.expected)
 			}
 		})
+	}
+}
 
 func BenchmarkDownloader(b *testing.B) {
 	for i := 0; i < b.N; i++ {
