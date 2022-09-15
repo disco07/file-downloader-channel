@@ -1,5 +1,5 @@
 [![test](https://github.com/disco07/file-downloader-channel/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/disco07/file-downloader-channel/actions/workflows/test.yml)
-![Coverage](https://img.shields.io/badge/Coverage-73.5%25-brightgreen)
+![Coverage](https://img.shields.io/badge/Coverage-75.3%25-brightgreen)
 
 # file-downloader-channel
 
