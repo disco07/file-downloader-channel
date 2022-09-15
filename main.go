@@ -69,16 +69,31 @@ func downloader(url string) error {
 	defer out.Close()
 
 	for i := 0; i < nbPart; i++ {
-		name := fmt.Sprintf("part%d", i)
-		file, err := ioutil.ReadFile(name)
+		err := Append(out, i, offset)
 		if err != nil {
 			return err
 		}
-		out.WriteAt(file, int64(i*offset))
+	}
 
-		if err := os.Remove(name); err != nil {
-			return err
-		}
+	return nil
+}
+
+func Append(f *os.File, partId, offset int) error {
+	name := fmt.Sprintf("part%d", partId)
+	file, err := ioutil.ReadFile(name)
+	if err != nil {
+		return err
+	}
+	_, err = f.WriteAt(file, int64(partId*offset))
+	if err != nil {
+		return errors.New("failed appending")
+	}
+
+	if err := os.Remove(name); err != nil {
+		return err
+	}
+	if err != nil {
+		return errors.New("failed appending")
 	}
 
 	return nil
