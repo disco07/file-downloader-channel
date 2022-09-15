@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestDownloaderNotError(t *testing.T) {
+func TestDownloader(t *testing.T) {
 	var downloaderTests = []struct {
 		description string
 		url         string
