@@ -33,6 +33,7 @@ func TestDownloaderNotError(t *testing.T) {
 			expected:    errors.New("unable to parse variable"),
 		},
 	}
+
 	for _, tt := range downloaderTests {
 		t.Run(tt.description, func(t *testing.T) {
 			err := downloader(tt.url)
