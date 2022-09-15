@@ -80,13 +80,13 @@ func TestAppend(t *testing.T) {
 			file:        f,
 			expected:    nil,
 		},
-		{
-			description: "unable to delete file",
-			part:        1,
-			offset:      1000,
-			file:        f,
-			expected:    errors.New("cannot delete the file because it is still open"),
-		},
+		//{
+		//	description: "unable to delete file",
+		//	part:        1,
+		//	offset:      1000,
+		//	file:        f,
+		//	expected:    errors.New("cannot delete the file because it is still open"),
+		//},
 		{
 			description: "file not found",
 			part:        2,
