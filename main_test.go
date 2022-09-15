@@ -6,28 +6,44 @@ import (
 	"testing"
 )
 
-var downloaderTests = []struct {
-	url      string
-	expected error
-}{
-	{"https://agritrop.cirad.fr/584726/1/Rapport.pdf", nil},
-	{"", fmt.Errorf("invalid url")},
-	{"https://youtu.be/w0NQlEMjntI", errors.New("unable to download file with multithreads")},
-	{"https://github.com/disco07/file-downloader", errors.New("unable to parse variable")},
-}
-
-func TestDownloader(t *testing.T) {
-	for _, tt := range downloaderTests {
-		err := downloader(tt.url)
-		if tt.expected == nil && err != nil {
-			t.Errorf("Unexpected error for input %v: %v (expected %v)", tt.url, err, tt.expected)
-		}
-
-		if tt.expected != nil && err.Error() != tt.expected.Error() {
-			t.Errorf("Unexpected error for input %v: %v (expected %v)", tt.url, err, tt.expected)
-		}
+func TestDownloaderNotError(t *testing.T) {
+	var downloaderTests = []struct {
+		description string
+		url         string
+		expected    error
+	}{
+		{
+			description: "Download work",
+			url:         "https://agritrop.cirad.fr/584726/1/Rapport.pdf",
+			expected:    nil,
+		},
+		{
+			description: "invalid url",
+			url:         "",
+			expected:    fmt.Errorf("invalid url"),
+		},
+		{
+			description: "unable to download file with multithreading",
+			url:         "https://youtu.be/w0NQlEMjntI",
+			expected:    errors.New("unable to download file with multithreads"),
+		},
+		{
+			description: "unable to parse variable",
+			url:         "https://github.com/disco07/file-downloader",
+			expected:    errors.New("unable to parse variable"),
+		},
 	}
-}
+	for _, tt := range downloaderTests {
+		t.Run(tt.description, func(t *testing.T) {
+			err := downloader(tt.url)
+			if tt.expected == nil && err != nil {
+				t.Errorf("Unexpected error for input %v: %v (expected %v)", tt.url, err, tt.expected)
+			}
+
+			if tt.expected != nil && err.Error() != tt.expected.Error() {
+				t.Errorf("Unexpected error for input %v: %v (expected %v)", tt.url, err, tt.expected)
+			}
+		})
 
 func BenchmarkDownloader(b *testing.B) {
 	for i := 0; i < b.N; i++ {
