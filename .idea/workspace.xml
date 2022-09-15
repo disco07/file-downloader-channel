@@ -6,10 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="cdac8b92-5320-4fa9-97c3-ef4970bd0a2f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Rapport.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/main_test.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,6 +15,9 @@
   <component name="GOROOT" url="file://$PROJECT_DIR$/../../../../Program Files/Go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="tyzpcxj9" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -77,6 +76,17 @@
       <pattern value="^\QTestDownloader\E$" />
       <method v="2" />
     </configuration>
+    <configuration name="TestDownloaderNotError in github.com/disco07/file-downloader-channel" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="file-downloader-channel" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="github.com/disco07/file-downloader-channel" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestDownloaderNotError\E$" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
       <module name="file-downloader-channel" />
       <working_directory value="$PROJECT_DIR$" />
@@ -90,6 +100,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Go Test.TestDownloader in github.com/disco07/file-downloader-channel" />
+        <item itemvalue="Go Test.TestDownloaderNotError in github.com/disco07/file-downloader-channel" />
         <item itemvalue="Go Build.go build github.com/disco07/file-downloader-channel" />
       </list>
     </recent_temporary>
