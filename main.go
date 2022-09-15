@@ -91,9 +91,6 @@ func Append(f *os.File, partId, offset int) error {
 	if err := os.Remove(name); err != nil {
 		return err
 	}
-	if err != nil {
-		return errors.New("failed appending")
-	}
 
 	return nil
 }
