@@ -27,7 +27,6 @@ func downloader(url string) error {
 
 	res, err := http.Head(url)
 	if err != nil {
-		fmt.Printf("error: %s", err.Error())
 		return errors.New("unsupported protocol scheme")
 	}
 	urlSplit := strings.Split(url, "/")
