@@ -81,7 +81,7 @@ func Append(f *os.File, partId, offset int) error {
 	name := fmt.Sprintf("part%d", partId)
 	file, err := ioutil.ReadFile(name)
 	if err != nil {
-		return err
+		return errors.New("file not found")
 	}
 	_, err = f.WriteAt(file, int64(partId*offset))
 	if err != nil {
@@ -89,7 +89,7 @@ func Append(f *os.File, partId, offset int) error {
 	}
 
 	if err := os.Remove(name); err != nil {
-		return err
+		return errors.New("cannot delete the file because it is still open")
 	}
 
 	return nil
