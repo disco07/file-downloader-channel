@@ -36,7 +36,7 @@ func TestDownloader(t *testing.T) {
 
 	for _, tt := range downloaderTests {
 		t.Run(tt.description, func(t *testing.T) {
-			err := worker(tt.url)
+			err := downloader(tt.url)
 			if tt.expected == nil && err != nil {
 				t.Errorf("Unexpected error for input %v: %v (expected %v)", tt.url, err, tt.expected)
 			}
@@ -50,6 +50,6 @@ func TestDownloader(t *testing.T) {
 
 func BenchmarkDownloader(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		worker("https://agritrop.cirad.fr/584726/1/Rapport.pdf")
+		downloader("https://agritrop.cirad.fr/584726/1/Rapport.pdf")
 	}
 }
